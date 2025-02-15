@@ -14,33 +14,61 @@ from selenium.webdriver.common.by import By
 def step_impl(context):
     context.response = context.driver.get(context.base_url)
 
-@when('I set the "Category" to "dog"')
-def step_impl(context):
-    element = context.driver.find_element(By.ID, 'pet_category')
+@when('I set the "{element_name}" to "{text_string}"')
+def step_impl(context, element_name, text_string):
+    element_id = "pet_" + element_name.lower().replace(' ', '_')
+    element = context.driver.find_element(By.ID, element_id)
     element.clear()
-    element.send_keys('dog')
+    element.send_keys(text_string)
 
-@when('I click the "Search" button')
-def step_impl(context):
-    element = context.driver.find_element(By.ID, 'search-btn')
+@when('I click the "{button}" button')
+def step_impl(context, button):
+    button_id = button.lower() + '-btn'
+    element = context.driver.find_element(By.ID, button_id)
     element.click()
 
-@then('I should see the message "Success"')
-def step_impl(context):
+@then('I should see the message "{message}"')
+def step_impl(context, message):
     element = context.driver.find_element(By.ID, 'flash_message')
-    assert "Success" in element.text
+    assert message in element.text
 
-@then('I should see "Fido" in the results')
-def step_impl(context):
+@then('I should see "{searched_name}" in the results')
+def step_impl(context, searched_name):
     element = context.driver.find_element(By.ID, 'search_results')
-    assert "Fido" in element.text
+    assert searched_name in element.text
 
-@then('I should not see "Kitty" in the results')
-def step_impl(context):
+@then('I should not see "{searched_name}" in the results')
+def step_impl(context, searched_name):
     element = context.driver.find_element(By.ID, 'search_results')
-    assert "Kitty" not in element.text
+    assert searched_name not in element.text    
+    
+# @when('I set the "Category" to "dog"')
+# def step_impl(context):
+#     element = context.driver.find_element(By.ID, 'pet_category')
+#     element.clear()
+#     element.send_keys('dog')
 
-@then('I should not see "Leo" in the results')
-def step_impl(context):
-    element = context.driver.find_element(By.ID, 'search_results')
-    assert "Leo" not in element.text
+# @when('I click the "Search" button')
+# def step_impl(context):
+#     element = context.driver.find_element(By.ID, 'search-btn')
+#     element.click()
+
+# @then('I should see the message "Success"')
+# def step_impl(context):
+#     element = context.driver.find_element(By.ID, 'flash_message')
+#     assert "Success" in element.text
+
+# @then('I should see "Fido" in the results')
+# def step_impl(context):
+#     element = context.driver.find_element(By.ID, 'search_results')
+#     assert "Fido" in element.text
+
+# @then('I should not see "Kitty" in the results')
+# def step_impl(context):
+#     element = context.driver.find_element(By.ID, 'search_results')
+#     assert "Kitty" not in element.text
+
+# @then('I should not see "Leo" in the results')
+# def step_impl(context):
+#     element = context.driver.find_element(By.ID, 'search_results')
+#     assert "Leo" not in element.text
